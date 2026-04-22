@@ -1,115 +1,21 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Row Pelham — NYAC Rowing Conditions</title>
-<style>
-  :root {
-    --bg: #0b1220;
-    --panel: #111a2e;
-    --panel-2: #16223c;
-    --text: #e7ecf5;
-    --muted: #97a3bb;
-    --accent: #6aa2ff;
-    --good: #35c26a;
-    --ok: #e7b948;
-    --bad: #e86363;
-    --border: #22304f;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 15px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif; }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 20px 16px 60px; }
-  header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
-  h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-  .sub { color: var(--muted); font-size: 13px; }
 
-  .score-card {
-    background: linear-gradient(180deg, var(--panel-2), var(--panel));
-    border: 1px solid var(--border);
+/* Banner with rower */
+.banner {
+    position: relative;
     border-radius: 14px;
-    padding: 22px;
-    display: flex;
-    align-items: center;
-    gap: 22px;
-    margin-bottom: 18px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    background: linear-gradient(180deg, #0e1d3b 0%, #173060 55%, #1d3d7c 100%);
   }
-  .score-num {
-    font-size: 68px; font-weight: 800; line-height: 1; letter-spacing: -0.02em;
-    min-width: 140px; text-align: center;
-    padding: 10px 6px; border-radius: 12px;
+  .banner svg { display: block; width: 100%; height: auto; }
+  .banner .overlay {
+    position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 14px 18px;
+    pointer-events: none;
   }
-  .score-label { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-  .score-verdict { color: var(--muted); font-size: 14px; }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 18px; }
-  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px 14px 12px; }
-  .card h3 { margin: 0 0 6px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
-  .card .val { font-size: 22px; font-weight: 700; margin: 2px 0; }
-  .card .note { color: var(--muted); font-size: 12px; }
-  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
-  .pill.good { background: rgba(53,194,106,0.15); color: var(--good); }
-  .pill.ok   { background: rgba(231,185,72,0.15); color: var(--ok); }
-  .pill.bad  { background: rgba(232,99,99,0.15); color: var(--bad); }
-
-  .forecast { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 4px 0; overflow: hidden; }
-  .forecast h2 { margin: 12px 16px 10px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
-  .row { display: grid; grid-template-columns: 80px 60px 80px 80px 1fr 60px; gap: 10px; align-items: center; padding: 10px 16px; border-top: 1px solid var(--border); font-size: 13px; }
-  .row.head { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-top: 0; padding-top: 12px; padding-bottom: 6px; }
-  .row .s { text-align: right; font-weight: 700; }
-
-  /* Oar — the whole row visually reads as one oar: grip → thick shaft → blade. */
-  .oar { display: flex; align-items: center; height: 24px; width: 100%; gap: 0; }
-  .oar .grip {
-    flex: 0 0 16px; height: 20px; border-radius: 4px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(0,0,0,0.28));
-    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
-    margin-right: -3px; position: relative; z-index: 2;
-  .oar { display: flex; align-items: center; height: 30px; width: 100%; gap: 0; }
-{
-.oar .grip {
-  flex: 0 0 18px;
-  height: 24px;
-  border-radius: 5px;
-  margin-right: -4px;
-  position: relative;
-  z-index: 2;
-}
-  .oar .shaft {
-  flex: 1 1 auto;
-  height: 14px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 3px rgba(0,0,0,0.35);
-}
-  .oar .shaft-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  border-radius: 8px;
-  transition: width .35s ease;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(0,0,0,0.25);
-}
- .oar .blade {
-  flex: 0 0 68px;
-  height: 30px;
-  margin-left: -6px;
-  z-index: 2;
-}
-
-  /* Wind direction arrow — rotates to show bearing */
-  .wind-arrow { display: inline-flex; align-items: center; justify-content: center;
-    width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; }
-  .wind-arrow svg { width: 100%; height: 100%; transition: transform .4s ease; }
-  .row .wind-cell { display: flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
-  .row .wind-cell .wind-arrow { width: 13px; height: 13px; margin-right: 2px; }
-  .compass { color: var(--muted); font-size: 12px; font-weight: 600; }
-
-  /* Banner with rower */
-  .banner {
+  .banner .title { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+  .banner .sub-b { color: #cfd8ec; font-size: 12px; margin-top: 2px; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+  .row .s.good { color: var(--good); } .row .s.ok { color: var(--ok); } .row .s.bad { color: var(--bad); }
   position: relative;
   border-radius: 18px;
   overflow: hidden;
@@ -123,422 +29,96 @@
   align-items: flex-end;
 }
 
-  footer { margin-top: 20px; color: var(--muted); font-size: 12px; }
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  .err { color: var(--bad); background: rgba(232,99,99,0.08); border: 1px solid rgba(232,99,99,0.3); padding: 10px 12px; border-radius: 10px; margin-bottom: 14px; font-size: 13px; }
-  .loading { color: var(--muted); text-align: center; padding: 40px 0; }
-  .refreshed { color: var(--muted); font-size: 12px; }
-  @media (max-width: 560px) {
-    .score-card { flex-direction: column; align-items: flex-start; gap: 12px; }
-    .row { grid-template-columns: 70px 50px 70px 70px 1fr 50px; font-size: 12px; }
-  }
-</style>
+footer { margin-top: 20px; color: var(--muted); font-size: 12px; }
+a { color: var(--accent); text-decoration: none; }
+@@ -124,84 +121,14 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="banner" aria-hidden="true">
+    <svg viewBox="0 0 800 130" preserveAspectRatio="xMidYMid slice" role="img">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#14264c"/>
+          <stop offset="60%" stop-color="#1d3d7c"/>
+          <stop offset="100%" stop-color="#25528f"/>
+        </linearGradient>
+        <radialGradient id="sunGrad" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%"  stop-color="#ffe7a6" stop-opacity="1"/>
+          <stop offset="60%" stop-color="#ffd47a" stop-opacity="0.7"/>
+          <stop offset="100%" stop-color="#ffd47a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- sky -->
+      <rect x="0" y="0" width="800" height="130" fill="url(#skyGrad)"/>
+
+      <!-- sun -->
+      <circle cx="680" cy="38" r="42" fill="url(#sunGrad)"/>
+      <circle cx="680" cy="38" r="14" fill="#ffe4a0"/>
+
+      <!-- distant shoreline -->
+      <path d="M 0 78 Q 120 72 260 76 T 520 74 T 800 78 L 800 85 L 0 85 Z" fill="#0d1a33" opacity="0.85"/>
+
+      <!-- water ripples -->
+      <g stroke="#9dc0ff" fill="none" stroke-linecap="round">
+        <path d="M 0 95  Q 60 92 130 95 T 260 95 T 390 95 T 520 95 T 650 95 T 800 95" stroke-width="1.1" opacity="0.55"/>
+        <path d="M 0 108 Q 80 105 160 108 T 320 108 T 480 108 T 640 108 T 800 108" stroke-width="1.0" opacity="0.40"/>
+        <path d="M 0 120 Q 50 117 100 120 T 200 120 T 300 120 T 400 120 T 500 120 T 600 120 T 700 120 T 800 120" stroke-width="0.9" opacity="0.30"/>
+      </g>
+
+      <!-- single scull (top-down view) -->
+      <g>
+        <!-- port oar -->
+        <line x1="400" y1="92" x2="248" y2="68" stroke="#e7ecf5" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="242" cy="66" rx="16" ry="5" fill="#6aa2ff" stroke="#e7ecf5" stroke-width="1.1"/>
+        <!-- splash at port blade -->
+        <g stroke="#e7ecf5" stroke-width="0.8" fill="none" opacity="0.7">
+          <path d="M 226 60 q 3 -4 8 -4"/>
+          <path d="M 250 58 q 2 -3 6 -2"/>
+        </g>
+
+        <!-- starboard oar -->
+        <line x1="400" y1="92" x2="552" y2="116" stroke="#e7ecf5" stroke-width="2.2" stroke-linecap="round"/>
+        <ellipse cx="558" cy="118" rx="16" ry="5" fill="#6aa2ff" stroke="#e7ecf5" stroke-width="1.1"/>
+        <g stroke="#e7ecf5" stroke-width="0.8" fill="none" opacity="0.7">
+          <path d="M 574 122 q 3 4 8 4"/>
+          <path d="M 550 124 q 2 3 6 2"/>
+        </g>
+
+        <!-- shell (single scull) — long, narrow, with tapered bow/stern -->
+        <path d="M 312 92 Q 316 88 400 88 Q 484 88 488 92 Q 484 96 400 96 Q 316 96 312 92 Z"
+              fill="#0f1a30" stroke="#e7ecf5" stroke-width="1"/>
+        <!-- bow -->
+        <path d="M 488 92 L 500 91.3 L 500 92.7 Z" fill="#0f1a30" stroke="#e7ecf5" stroke-width="0.8"/>
+        <!-- stern -->
+        <path d="M 312 92 L 300 91.3 L 300 92.7 Z" fill="#0f1a30" stroke="#e7ecf5" stroke-width="0.8"/>
+
+        <!-- rigger (outrigger bars connecting oars to shell) -->
+        <line x1="395" y1="92" x2="378" y2="82" stroke="#8aa3cc" stroke-width="1"/>
+        <line x1="405" y1="92" x2="422" y2="102" stroke="#8aa3cc" stroke-width="1"/>
+
+        <!-- rower -->
+        <ellipse cx="400" cy="92" rx="6" ry="4" fill="#1a2e55" stroke="#e7ecf5" stroke-width="0.8"/>
+        <circle  cx="400" cy="92" r="3" fill="#e7ecf5"/>
+
+        <!-- wake behind boat -->
+        <path d="M 290 92 Q 270 90 250 93 M 290 93 Q 270 95 250 91" stroke="#ffffff" stroke-width="0.7" fill="none" opacity="0.35"/>
+      </g>
+    </svg>
+    <div class="overlay">
+      <div>
+        <div class="title">Row Pelham</div>
+        <div class="sub-b">NYAC Travers Island · Long Island Sound</div>
+      </div>
   <div class="banner">
   <div class="overlay">
     <div>
       <div class="title">Row Pelham</div>
       <div class="sub-b">NYAC Travers Island · Long Island Sound</div>
-    </div>
-  </div>
+</div>
+</div>
 </div>
 
-  <header>
-    <div class="refreshed" id="refreshed"></div>
-  </header>
-
-  <div id="err-slot"></div>
-  <div id="content"><div class="loading">Loading live conditions…</div></div>
-
-  <footer>
-    Data: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> (weather, sunset) ·
-    <a href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8518490" target="_blank" rel="noopener">NOAA New Rochelle #8518490</a> (tide).
-    Scoring is advisory — always use your own judgment on the water.
-  </footer>
-</div>
-
-<script>
-/* ----- LOCATION ----- */
-const LAT = 40.8998;       // NYAC Travers Island, Pelham Manor
-const LON = -73.7855;
-const TIDE_STATION = "8518490"; // New Rochelle / Echo Bay — adjacent to Travers Island
-const TIDE_STATION_NAME = "New Rochelle";
-const TIMEZONE = "America/New_York";
-
-/* ----- SCORING WEIGHTS (total 100, shown as /10) -----
-   Wind 30 · Tide 30 · Daylight 25 · Temperature 15 */
-
-function windScore(mph) {
-  if (mph <= 5) return 30;
-  if (mph <= 7) return 27;
-  if (mph <= 10) return 18;
-  if (mph <= 13) return 9;
-  if (mph <= 17) return 3;
-  return 0;
-}
-function tempScore(f) {
-  if (f >= 55 && f <= 82) return 15;
-  if ((f >= 48 && f < 55) || (f > 82 && f <= 88)) return 11;
-  if ((f >= 40 && f < 48) || (f > 88 && f <= 93)) return 6;
-  if ((f >= 32 && f < 40) || (f > 93 && f <= 98)) return 2;
-  return 0;
-}
-// hoursLeft = hours between the target time and sunset (can be negative)
-function daylightScore(hoursLeft) {
-  if (hoursLeft >= 2.5) return 25;
-  if (hoursLeft >= 2.0) return 22;
-  if (hoursLeft >= 1.5) return 15;
-  if (hoursLeft >= 1.0) return 8;
-  if (hoursLeft >= 0.5) return 3;
-  return 0;
-}
-/* Tide: best is mid-to-high, rising. Water level normalized to today's low/high range:
-   1.0 = high, 0.0 = low.  Rising adds a bonus. */
-function tideScore(norm, rising) {
-  let base;
-  if (norm >= 0.75) base = 30;            // high
-  else if (norm >= 0.55) base = 27;       // upper mid — sweet spot
-  else if (norm >= 0.40) base = 20;       // mid
-  else if (norm >= 0.25) base = 12;       // lower mid
-  else if (norm >= 0.10) base = 5;        // near low
-  else base = 0;                          // dead low (mudflats risk)
-  if (rising && norm < 0.90) base = Math.min(30, base + 2);
-  if (!rising && norm < 0.40) base = Math.max(0, base - 2);
-  return base;
-}
-
-function verdict(score) {
-  if (score >= 8.5) return { pill: "good", label: "Go row." };
-  if (score >= 7.0) return { pill: "good", label: "Good window." };
-  if (score >= 5.5) return { pill: "ok",   label: "Workable — watch one factor." };
-  if (score >= 4.0) return { pill: "ok",   label: "Marginal." };
-  return              { pill: "bad",  label: "Not ideal." };
-}
-function pillFor(score10) {
-  if (score10 >= 7) return "good";
-  if (score10 >= 5) return "ok";
-  return "bad";
-}
-
-async function fetchJSON(url) {
-  const r = await fetch(url);
-  if (!r.ok) throw new Error(url.split("?")[0] + " -> " + r.status);
-  return r.json();
-}
-
-async function loadAll() {
-  // 1) Weather + sunset (next 48h hourly)
-  const wUrl = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}`
-    + `&current=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m`
-    + `&hourly=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m`
-    + `&daily=sunrise,sunset`
-    + `&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=${encodeURIComponent(TIMEZONE)}&forecast_days=2`;
-
-  // 2) Tide hi/lo (today + tomorrow) — for range & rising/falling
-  const today = new Date();
-  const yyyymmdd = d => {
-    const dt = new Date(d);
-    return dt.getFullYear().toString()
-      + String(dt.getMonth()+1).padStart(2,"0")
-      + String(dt.getDate()).padStart(2,"0");
-  };
-  const end = new Date(today); end.setDate(end.getDate() + 2);
-  const tideHiloUrl = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=row-pelham`
-    + `&station=${TIDE_STATION}&datum=MLLW&time_zone=lst_ldt&units=english&interval=hilo&format=json`
-    + `&begin_date=${yyyymmdd(today)}&end_date=${yyyymmdd(end)}`;
-
-  // 3) Tide 6-minute predictions (for interpolated current level + hourly forecast)
-  const tideHourlyUrl = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?product=predictions&application=row-pelham`
-    + `&station=${TIDE_STATION}&datum=MLLW&time_zone=lst_ldt&units=english&interval=h&format=json`
-    + `&begin_date=${yyyymmdd(today)}&end_date=${yyyymmdd(end)}`;
-
-  const [weather, tideHilo, tideHourly] = await Promise.all([
-    fetchJSON(wUrl), fetchJSON(tideHiloUrl), fetchJSON(tideHourlyUrl)
-  ]);
-  return { weather, tideHilo, tideHourly };
-}
-
-/* Direction interpolation via unit-vector averaging (handles the 359°→0° wrap). */
-function interpDir(series, when) {
-  const t = when.getTime();
-  for (let i = 0; i < series.length - 1; i++) {
-    const a = series[i], b = series[i+1];
-    if (t >= a.t.getTime() && t <= b.t.getTime()) {
-      const r = (t - a.t.getTime()) / (b.t.getTime() - a.t.getTime());
-      const ar = a.v * Math.PI/180, br = b.v * Math.PI/180;
-      const x = Math.cos(ar) + (Math.cos(br) - Math.cos(ar)) * r;
-      const y = Math.sin(ar) + (Math.sin(br) - Math.sin(ar)) * r;
-      let deg = Math.atan2(y, x) * 180/Math.PI;
-      if (deg < 0) deg += 360;
-      return deg;
-    }
-  }
-  if (t < series[0].t.getTime()) return series[0].v;
-  return series[series.length-1].v;
-}
-
-/* Convert meteorological degrees (where wind comes FROM) to compass label. */
-function compass(deg) {
-  const dirs = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
-  return dirs[Math.round(((deg % 360) / 22.5)) % 16];
-}
-
-/* Wind arrow: points in the direction the wind is BLOWING TOWARD (convention on weather maps).
-   Since Open-Meteo gives the direction wind is FROM, we rotate by (deg + 180). */
-function windArrowSvg(deg, color) {
-  const c = color || "currentColor";
-  const rot = (deg + 180) % 360;
-  return `<span class="wind-arrow"><svg viewBox="0 0 20 20" style="transform: rotate(${rot}deg);">
-    <path d="M10 1.5 L15.5 14 L10 11.3 L4.5 14 Z" fill="${c}" stroke="rgba(0,0,0,0.35)" stroke-width="0.6" stroke-linejoin="round"/>
-  </svg></span>`;
-}
-
-/* Interpolate tide level at an arbitrary Date from an array of {t: Date, v: number}. */
-function interp(series, when) {
-  const t = when.getTime();
-  for (let i = 0; i < series.length - 1; i++) {
-    const a = series[i], b = series[i+1];
-    if (t >= a.t.getTime() && t <= b.t.getTime()) {
-      const r = (t - a.t.getTime()) / (b.t.getTime() - a.t.getTime());
-      return a.v + (b.v - a.v) * r;
-    }
-  }
-  // extrapolate with nearest
-  if (t < series[0].t.getTime()) return series[0].v;
-  return series[series.length-1].v;
-}
-
-function parseNoaaDate(s) {
-  // NOAA returns "YYYY-MM-DD HH:MM" in local time (lst_ldt). Parse as local.
-  const [d, hm] = s.split(" ");
-  const [Y,M,D] = d.split("-").map(Number);
-  const [h,mi] = hm.split(":").map(Number);
-  return new Date(Y, M-1, D, h, mi, 0, 0);
-}
-
-function fmtTime(dt) {
-  return dt.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
-}
-function fmtDay(dt) {
-  const today = new Date(); today.setHours(0,0,0,0);
-  const d0 = new Date(dt); d0.setHours(0,0,0,0);
-  const diff = Math.round((d0 - today) / 86400000);
-  if (diff === 0) return "Today";
-  if (diff === 1) return "Tomorrow";
-  return dt.toLocaleDateString([], { weekday: "short" });
-}
-
-function computeScoreAt(when, wx, tideSeries, hiloSeries, sunset) {
-  // Wind & temp at `when` — interpolate from hourly
-  const hours = wx.hourly.time.map(s => new Date(s));
-  const iW = interp(hours.map((t,i)=>({t, v: wx.hourly.wind_speed_10m[i]})), when);
-  const iT = interp(hours.map((t,i)=>({t, v: wx.hourly.temperature_2m[i]})), when);
-  const iG = interp(hours.map((t,i)=>({t, v: wx.hourly.wind_gusts_10m[i]})), when);
-  const iDir = interpDir(hours.map((t,i)=>({t, v: wx.hourly.wind_direction_10m[i]})), when);
-
-  // Tide level at `when` + rising?
-  const level = interp(tideSeries, when);
-  const levelPlus = interp(tideSeries, new Date(when.getTime() + 15*60000));
-  const rising = levelPlus > level;
-
-  // Normalize against the 24h window of hi/lo straddling `when`
-  // find surrounding Hi+Lo for range
-  const sortedByTime = [...hiloSeries].sort((a,b)=>a.t - b.t);
-  let lo = null, hi = null;
-  for (const p of sortedByTime) {
-    if (Math.abs(p.t - when) <= 14*3600*1000) {
-      if (p.type === "L") { if (!lo || Math.abs(p.t-when) < Math.abs(lo.t-when)) lo = p; }
-      else                { if (!hi || Math.abs(p.t-when) < Math.abs(hi.t-when)) hi = p; }
-    }
-  }
-  const rangeLo = lo ? lo.v : Math.min(...tideSeries.map(p=>p.v));
-  const rangeHi = hi ? hi.v : Math.max(...tideSeries.map(p=>p.v));
-  const norm = (level - rangeLo) / Math.max(0.1, (rangeHi - rangeLo));
-  const normClamped = Math.max(0, Math.min(1, norm));
-
-  // Daylight hours remaining from `when`
-  const hoursLeft = (sunset.getTime() - when.getTime()) / 3600000;
-
-  const sW = windScore(iW);
-  const sT = tempScore(iT);
-  const sTi = tideScore(normClamped, rising);
-  const sD = daylightScore(hoursLeft);
-  const total = sW + sT + sTi + sD; // /100
-  const score10 = Math.round(total / 10 * 10) / 10; // one decimal
-
-  return {
-    wind: iW, gusts: iG, temp: iT, windDir: iDir,
-    tideLevel: level, tideNorm: normClamped, rising,
-    hoursLeft, sunset,
-    components: { wind: sW, temp: sT, tide: sTi, daylight: sD },
-    total, score10,
-  };
-}
-
-function pickSunsetFor(date, wx) {
-  // wx.daily.sunset is an array matching wx.daily.time (YYYY-MM-DD)
-  const key = date.getFullYear() + "-" + String(date.getMonth()+1).padStart(2,"0") + "-" + String(date.getDate()).padStart(2,"0");
-  const idx = wx.daily.time.indexOf(key);
-  if (idx >= 0) return new Date(wx.daily.sunset[idx]);
-  return new Date(wx.daily.sunset[0]);
-}
-
-function render({ weather, tideHilo, tideHourly }) {
-  const hiloSeries = (tideHilo.predictions || []).map(p => ({
-    t: parseNoaaDate(p.t), v: parseFloat(p.v), type: p.type // "H" or "L"
-  }));
-  // Prefer hourly predictions; fall back to sinusoidal interpolation between hi/lo
-  // (subordinate stations sometimes return only hi/lo).
-  let tideSeries = (tideHourly.predictions || []).map(p => ({
-    t: parseNoaaDate(p.t), v: parseFloat(p.v)
-  }));
-  if (tideSeries.length < 2 && hiloSeries.length >= 2) {
-    tideSeries = [];
-    for (let i = 0; i < hiloSeries.length - 1; i++) {
-      const a = hiloSeries[i], b = hiloSeries[i+1];
-      const dur = b.t.getTime() - a.t.getTime();
-      const amp = (b.v - a.v) / 2;
-      const mid = (a.v + b.v) / 2;
-      // cosine interpolation across ~15-min steps
-      for (let step = 0; step <= dur; step += 15*60*1000) {
-        const ph = Math.PI * (step / dur);
-        const v = mid - amp * Math.cos(ph);
-        tideSeries.push({ t: new Date(a.t.getTime() + step), v });
-      }
-    }
-  }
-
-  const now = new Date();
-  const sunsetToday = pickSunsetFor(now, weather);
-  const nowRes = computeScoreAt(now, weather, tideSeries, hiloSeries, sunsetToday);
-
-  // --- Headline card ---
-  const v = verdict(nowRes.score10);
-  const pill = pillFor(nowRes.score10);
-  const scoreColor = pill === "good" ? "var(--good)" : (pill === "ok" ? "var(--ok)" : "var(--bad)");
-
-  let html = "";
-  html += `<div class="score-card">
-    <div class="score-num" style="color:${scoreColor}; background: rgba(255,255,255,0.03);">
-      ${nowRes.score10.toFixed(1)}<span style="font-size:22px; color:var(--muted); font-weight:600;">/10</span>
-    </div>
-    <div>
-      <div class="score-label">${v.label}</div>
-      <div class="score-verdict">${breakdown(nowRes)}</div>
-    </div>
-  </div>`;
-
-  // --- Now tiles ---
-  html += `<div class="grid">
-    ${tile("Wind", `${windArrowSvg(nowRes.windDir)}${nowRes.wind.toFixed(1)} mph`, `From ${compass(nowRes.windDir)} (${Math.round(nowRes.windDir)}°) · Gusts ${nowRes.gusts.toFixed(0)} mph`, pillFor(nowRes.components.wind/30*10), "≤7 mph ideal")}
-    ${tile("Tide", `${nowRes.tideLevel.toFixed(1)} ft`, `${(nowRes.tideNorm*100).toFixed(0)}% of range · ${nowRes.rising ? "rising" : "falling"}`, pillFor(nowRes.components.tide/30*10), "Mid→high ideal")}
-    ${tile("Daylight", nowRes.hoursLeft > 0 ? `${nowRes.hoursLeft.toFixed(1)} h` : "sunset passed", `Sunset ${fmtTime(sunsetToday)}`, pillFor(nowRes.components.daylight/25*10), "≥2h ideal")}
-    ${tile("Temp", `${nowRes.temp.toFixed(0)} °F`, "", pillFor(nowRes.components.temp/15*10), "55–82°F ideal")}
-  </div>`;
-
-  // --- Forecast rows: next 12 hourly slots, scored individually ---
-  html += `<div class="forecast">
-    <h2>Next 12 hours</h2>
-    <div class="row head"><div>Time</div><div>Score</div><div>Wind</div><div>Tide</div><div>&nbsp;</div><div></div></div>`;
-  const startHour = new Date(now); startHour.setMinutes(0,0,0); startHour.setHours(startHour.getHours()+1);
-  for (let i = 0; i < 12; i++) {
-    const when = new Date(startHour.getTime() + i*3600000);
-    const sunset = pickSunsetFor(when, weather);
-    const r = computeScoreAt(when, weather, tideSeries, hiloSeries, sunset);
-    const sColor = pillFor(r.score10);
-    const barPct = Math.max(4, Math.round(r.score10 * 10));
-    const barColor = sColor === "good" ? "var(--good)" : (sColor === "ok" ? "var(--ok)" : "var(--bad)");
-    const gripColor = sColor === "good" ? "#2a8a4c" : (sColor === "ok" ? "#a4842f" : "#a3484a");
-    html += `<div class="row">
-      <div>${fmtDay(when)} ${fmtTime(when)}</div>
-      <div class="s ${sColor}">${r.score10.toFixed(1)}</div>
-      <div class="wind-cell" title="From ${compass(r.windDir)} (${Math.round(r.windDir)}°)">
-        ${windArrowSvg(r.windDir, "#c7d2e6")}<span>${r.wind.toFixed(0)}</span>
-      </div>
-      <div>${(r.tideNorm*100).toFixed(0)}% ${r.rising ? "↑" : "↓"}</div>
-      <div class="oar" title="Score ${r.score10.toFixed(1)}/10 · wind from ${compass(r.windDir)}">
-        <div class="grip" style="background: linear-gradient(180deg, ${barColor}, ${gripColor});"></div>
-        <div class="shaft"><div class="shaft-fill" style="width:${barPct}%; background:${barColor};"></div></div>
-        <div class="blade"><svg viewBox="0 0 68 30" preserveAspectRatio="xMidYMid meet">
-  <path d="M 0 11 
-           L 10 11 
-           Q 16 7 28 5 
-           L 52 4 
-           Q 63 5 66 14 
-           Q 63 25 52 26 
-           L 28 25 
-           Q 16 23 10 19 
-           L 0 19 Z"
-        fill="${barColor}"
-        stroke="rgba(0,0,0,0.28)"
-        stroke-width="0.8"
-        stroke-linejoin="round"/>
-  <path d="M 10 13 Q 24 10 48 10" 
-        stroke="rgba(255,255,255,0.38)" 
-        stroke-width="1" 
-        fill="none" 
-        stroke-linecap="round"/>
-  <path d="M 8 15 L 60 15" 
-        stroke="rgba(0,0,0,0.22)" 
-        stroke-width="0.7" 
-        fill="none"/>
-</svg></div>
-      <div style="color:var(--muted); text-align:right;">${r.temp.toFixed(0)}°</div>
-    </div>`;
-  }
-  html += `</div>`;
-
-  // --- Next hi/lo tides list (helpful context) ---
-  const upcoming = hiloSeries.filter(p => p.t > now).slice(0, 4);
-  if (upcoming.length) {
-    html += `<div class="forecast" style="margin-top:14px;">
-      <h2>Upcoming tides (${TIDE_STATION_NAME})</h2>`;
-    for (const p of upcoming) {
-      html += `<div class="row" style="grid-template-columns: 140px 70px 1fr;">
-        <div>${fmtDay(p.t)} ${fmtTime(p.t)}</div>
-        <div><span class="pill ${p.type==='H'?'good':'ok'}">${p.type==='H'?'High':'Low'}</span></div>
-        <div style="text-align:right; color:var(--muted);">${p.v.toFixed(1)} ft</div>
-      </div>`;
-    }
-    html += `</div>`;
-  }
-
-  document.getElementById("content").innerHTML = html;
-  document.getElementById("refreshed").textContent = "Updated " + fmtTime(now);
-}
-
-function breakdown(r) {
-  const parts = [];
-  parts.push(`Wind ${r.components.wind}/30`);
-  parts.push(`Tide ${r.components.tide}/30`);
-  parts.push(`Daylight ${r.components.daylight}/25`);
-  parts.push(`Temp ${r.components.temp}/15`);
-  return parts.join(" · ");
-}
-
-function tile(title, val, note, pill, sub) {
-  const pillCls = pill === "good" ? "good" : (pill === "ok" ? "ok" : "bad");
-  return `<div class="card">
-    <h3>${title} <span class="pill ${pillCls}" style="float:right;">${pill === "good" ? "good" : (pill === "ok" ? "ok" : "low")}</span></h3>
-    <div class="val">${val}</div>
-    <div class="note">${note || sub}</div>
-  </div>`;
-}
-
-(async () => {
-  try {
-    const data = await loadAll();
-    render(data);
-  } catch (e) {
-    document.getElementById("err-slot").innerHTML =
-      `<div class="err">Couldn't load live data: ${e.message}. Check your internet connection and reload.</div>`;
-    document.getElementById("content").innerHTML = "";
-    console.error(e);
-  }
-})();
-</script>
-</body>
-</html>
+<header>
+<div class="refreshed" id="refreshed"></div>
